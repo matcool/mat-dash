@@ -1,0 +1,19 @@
+include_directories(
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/extensions
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx/include
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx/kazmath/include
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx/platform/win32
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx/platform/third_party/win32
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx/platform/third_party/win32/OGLES
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/gd.h
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/gd.h/include
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/minhook/include
+    ${CMAKE_CURRENT_LIST_DIR}/include/
+)
+
+link_libraries(
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/cocos2dx/libcocos2d.lib
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/cocos-headers/extensions/libExtensions.lib
+)
