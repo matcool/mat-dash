@@ -4,6 +4,10 @@ mat dash
 
 templates gone insane
 
+Thx to pie for some help on the templates
+
+this project is very basic, as its only temporary while lilac is in the works
+
 ## Usage
 
 ```cpp
@@ -43,9 +47,19 @@ void mod_main() {
     add_hook<&MenuLayer_onNewgrounds>(gd::base + 0x191e90);
     add_hook<&GJDropDownLayer_init>(gd::base + 0x113530);
     // Note the `Thiscall`, this is because PlayLayer::update is not
-    // optimized, which is what MAT dash defaults too
+    // optimized, which is what MAT dash defaults to
     add_hook<&PlayLayer_update, Thiscall>(gd::base + 0x2029c0);
 }
 
 #include <matdash/boilerplate.hpp>
 ```
+
+# Installation
+
+If youre using cmake then you can
+```cmake
+add_subdirectory(mat-dash)
+include(mat-dash/include.cmake)
+target_link_libraries(${PROJECT_NAME} mat-dash)
+```
+(linking to mat-dash is only for minhook rn)
