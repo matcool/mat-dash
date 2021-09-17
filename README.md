@@ -17,8 +17,9 @@ using namespace cocos2d;
 
 class MenuLayerMod : public gd::MenuLayer {
 public:
-    // name cant be `init` because it messes up due to virtuals :c
-    inline bool init_() {
+    // here the name cant be `init` as that'd make it a virtual
+    // which doesnt work with the current code
+    bool init_() {
         if (!orig<&MenuLayerMod::init_>(this)) return false;
 
         auto label = CCLabelBMFont::create("Hello world!", "bigFont.fnt");
