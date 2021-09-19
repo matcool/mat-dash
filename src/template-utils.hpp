@@ -4,106 +4,14 @@
 template <class F>
 struct optcall;
 
-template <auto func>
-struct WrapMemberCall {
-    template <typename T, typename... Args>
-    static auto wrap(T* instance, Args... args) {
-        return (instance->*func)(args...);
-    }
-};
-
 template <typename R, typename... Args>
 struct optcall<R(*)(Args...)> : public optcall<R(Args...)> {};
 
-template<class R, typename T, class... Args>
-struct optcall<R(T, float, Args...)> {
-    using F = R(T, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, Args... args) {
-        float a1;
-        __asm movss a1, xmm1;
-        return func(self, a1, args...);
-    }
-};
+template <class F>
+struct optfastcall;
 
-template<class R, typename T, typename A, class... Args>
-struct optcall<R(T, A, float, Args...)> {
-    using F = R(T, A, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, A a1, Args... args) {
-        float a2;
-        __asm movss a2, xmm2;
-        return func(self, a1, a2, args...);
-    }
-};
-
-template<class R, typename T, class... Args>
-struct optcall<R(T, float, float, Args...)> {
-    using F = R(T, float, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, Args... args) {
-        float a1, a2;
-        __asm movss a1, xmm1
-        __asm movss a2, xmm2
-        return func(self, a1, a2, args...);
-    }
-};
-
-template<class R, typename T, typename A, typename B, class... Args>
-struct optcall<R(T, A, B, float, Args...)> {
-    using F = R(T, A, B, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, A a1, B a2, Args... args) {
-        float a3;
-        __asm movss a3, xmm3
-        return func(self, a1, a2, a3, args...);
-    }
-};
-
-template<class R, typename T, typename B, class... Args>
-struct optcall<R(T, float, B, float, Args...)> {
-    using F = R(T, float, B, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, B a2, Args... args) {
-        float a1, a3;
-        __asm movss a1, xmm1
-        __asm movss a3, xmm3
-        return func(self, a1, a2, a3, args...);
-    }
-};
-
-template<class R, typename T, typename A, class... Args>
-struct optcall<R(T, A, float, float, Args...)> {
-    using F = R(T, A, float, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, A a1, Args... args) {
-        float a2, a3;
-        __asm movss a2, xmm2
-        __asm movss a3, xmm3
-        return func(self, a1, a2, a3, args...);
-    }
-};
-
-template<class R, typename T, class... Args>
-struct optcall<R(T, float, float, float, Args...)> {
-    using F = R(T, float, float, float, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, Args... args) {
-        float a1, a2, a3;
-        __asm movss a1, xmm1
-        __asm movss a2, xmm2
-        __asm movss a3, xmm3
-        return func(self, a1, a2, a3, args...);
-    }
-};
-
-template<class R, typename T, class... Args>
-struct optcall<R(T, Args...)> {
-    using F = R(T, Args...); 
-    template <F func>
-    static R __fastcall wrap(T self, void*, Args... args) { return func(self, args...); }
-};
-
+template <typename R, typename... Args>
+struct optfastcall<R(*)(Args...)> : public optfastcall<R(Args...)> {};
 
 template<class F>
 struct WrapperOptcall;
@@ -111,31 +19,19 @@ struct WrapperOptcall;
 template <typename R, typename... Args>
 struct WrapperOptcall<R(*)(Args...)> : public WrapperOptcall<R(__thiscall*)(Args...)> {};
 
-template <typename R, typename A, typename... Args>
-struct WrapperOptcall<R(__thiscall*)(A, float, Args...)> {
-    R(__thiscall* addr)(A, Args...);
-    auto operator()(A a0, float a1, Args... args) {
-        __asm movss xmm1, a1;
-        return addr(a0, args...);
-    }
-};
+template<class F>
+struct WrapperOptfastcall;
 
-template <typename R, typename A, typename B, typename... Args>
-struct WrapperOptcall<R(__thiscall*)(A, B, float, Args...)> {
-    R(__thiscall* addr)(A, B, Args...);
-    auto operator()(A a0, B a1, float a2, Args... args) {
-        __asm movss xmm2, a2;
-        return addr(a0, a1, args...);
-    }
-};
+template <typename R, typename... Args>
+struct WrapperOptfastcall<R(*)(Args...)> : public WrapperOptfastcall<R(__fastcall*)(Args...)> {};
 
-// TODO: copy paste more to complete 2**4 specializations of WrapperOptcall
+#include "gen.hpp"
 
-template<typename R, typename... Args>
-struct WrapperOptcall<R(__thiscall*)(Args...)> {
-    R(__thiscall* addr)(Args...);
-    auto operator()(Args... args) {
-        return addr(args...);
+template <auto func>
+struct WrapMemberCall {
+    template <typename T, typename... Args>
+    static auto wrap(T* instance, Args... args) {
+        return (instance->*func)(args...);
     }
 };
 
