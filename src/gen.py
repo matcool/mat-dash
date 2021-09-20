@@ -37,11 +37,17 @@ def gen(args, ret, thiscall=False):
     ts = []
     if not ret: ts.append('R')
     n = max(i if v else -1 for i, v in enumerate(args))
+    special = False
+    if thiscall and n == -1:
+        n = 0
+        special = True
     letter = lambda i: 'ABCD'[i]
     ts.extend([letter(i) for i, v in enumerate(args) if not v and i < n])
+    if special: ts.append('A')
     ts.append('...Args')
     function_type = 'R(' + ', '.join(['float' if v else letter(i) for i, v in enumerate(args) if i <= n] + ['Args...']) + ')'
     function_args = [f'{letter(i)} a{i}' for i, v in enumerate(args) if not v and i < n] + ['Args... args']
+    if special: function_args.insert(0, 'A a0')
     if thiscall:
         function_args.insert(1, 'void*')
     function_args = ', '.join(function_args)

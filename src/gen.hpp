@@ -206,12 +206,12 @@ struct optfastcall<R(float, float, float, float, Args...)> {
 };
 
 
-template <typename R, typename ...Args>
-struct optcall<R(Args...)> {
-	using F = R(Args...);
+template <typename R, typename A, typename ...Args>
+struct optcall<R(A, Args...)> {
+	using F = R(A, Args...);
 	template <F func>
-	static auto __fastcall wrap(Args... args, void*) {
-		return func(args...);
+	static auto __fastcall wrap(A a0, void*, Args... args) {
+		return func(a0, args...);
 	}
 };
 
