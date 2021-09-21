@@ -1,16 +1,20 @@
 template <typename F>
-struct __mat_dash_function_arg_count;
+struct __mat_dash_main_wrapper;
 
-template <typename R, typename... Args>
-struct __mat_dash_function_arg_count<R(Args...)> {
-    static constexpr auto count = sizeof...(Args);
+template <>
+struct __mat_dash_main_wrapper<void(HMODULE)> {
+    template <auto func>
+    static void call(HMODULE module) { func(module); }
+};
+
+template <>
+struct __mat_dash_main_wrapper<void()> {
+    template <auto func>
+    static void call(HMODULE) { func(); }
 };
 
 DWORD WINAPI __mat_dash_thread_function(void* module) {
-    // if constexpr (__mat_dash_function_arg_count<decltype(mod_main)>::count == 1)
-    //     mod_main(reinterpret_cast<HMODULE>(module));
-    // else
-        mod_main();
+    __mat_dash_main_wrapper<decltype(mod_main)>::call<mod_main>(reinterpret_cast<HMODULE>(module));
     return 0;
 }
 
