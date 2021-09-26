@@ -38,3 +38,13 @@ void add_hook(uintptr_t address) {
     }
     MH_EnableHook(reinterpret_cast<void*>(address));
 }
+
+template <auto func, typename CallConv = Optcall>
+void add_hook(void* address) {
+    add_hook<func, CallConv>(reinterpret_cast<uintptr_t>(address));
+}
+
+template <typename R, typename T, typename... Args>
+void* member_addr(R(T::* func)(Args...)) {
+    return reinterpret_cast<void*&>(func);
+}
