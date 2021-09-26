@@ -12,6 +12,8 @@ this project is very basic, as its only temporary while lilac is in the works
 
 ```cpp
 #include <matdash.hpp>
+#include <matdash/minhook.hpp>
+#include <gd.h>
 
 using namespace cocos2d;
 
@@ -59,8 +61,5 @@ void mod_main() {
 
 If youre using cmake then you can
 ```cmake
-add_subdirectory(mat-dash)
 include(mat-dash/include.cmake)
-target_link_libraries(${PROJECT_NAME} mat-dash)
 ```
-(linking to mat-dash is only for minhook rn)
