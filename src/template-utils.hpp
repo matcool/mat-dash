@@ -67,6 +67,7 @@ struct AddThiscall<R(*)(Args...)> {
 // to be used in template args
 struct Optcall;
 struct Thiscall;
+struct Optfastcall;
 
 template <auto func, typename CallConv, typename enable = void>
 struct Orig {
@@ -81,6 +82,11 @@ struct Orig<func, CallConv, std::enable_if_t<std::is_member_function_pointer<dec
 template <auto func>
 struct Orig<func, Thiscall, void> {
     inline static typename AddThiscall<decltype(func)>::type orig;
+};
+
+template <auto func>
+struct Orig<func, Optfastcall, void> {
+    inline static WrapperOptfastcall<decltype(func)> orig;
 };
 
 template <auto func, typename CallConv = Optcall, typename... Args>

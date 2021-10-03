@@ -23,6 +23,11 @@ void add_hook(uintptr_t address) {
             &thiscall<decltype(func)>::wrap<func>,
             reinterpret_cast<void**>(&Orig<func, Thiscall>::orig)
         );
+    } else if constexpr (std::is_same_v<CallConv, Optfastcall>) {
+        __mat_dash_add_hook(addr,
+            &optfastcall<decltype(func)>::wrap<func>,
+            reinterpret_cast<void**>(&Orig<func, CallConv>::orig)
+        );
     } else {
         static_assert(std::false_type::value, "Invalid calling convention");
     }
