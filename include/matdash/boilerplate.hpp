@@ -19,7 +19,9 @@ DWORD WINAPI __mat_dash_thread_function(void* module) {
 }
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID) {
-    if (reason == DLL_PROCESS_ATTACH)
-        CreateThread(0, 0, __mat_dash_thread_function, module, 0, 0);
+    if (reason == DLL_PROCESS_ATTACH) {
+        if (auto handle = CreateThread(0, 0, __mat_dash_thread_function, module, 0, 0))
+            CloseHandle(handle);
+    }
     return TRUE;
 }
