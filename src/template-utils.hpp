@@ -40,7 +40,7 @@ struct MemberToFn;
 
 template <typename R, typename T, typename... Args>
 struct MemberToFn<R(T::*)(Args...)> {
-    using type = typename R(__thiscall*)(T*, Args...);
+    using type = R(__thiscall*)(T*, Args...);
 };
 
 template <typename F>
@@ -48,7 +48,7 @@ struct RemoveThiscall;
 
 template <typename R, typename... Args>
 struct RemoveThiscall<R(__thiscall*)(Args...)> {
-    using type = typename R(Args...);
+    using type = R(Args...);
 };
 
 template <typename F>
@@ -56,12 +56,12 @@ struct AddThiscall;
 
 template <typename R, typename... Args>
 struct AddThiscall<R(Args...)> {
-    using type = typename R(__thiscall*)(Args...);
+    using type = R(__thiscall*)(Args...);
 };
 
 template <typename R, typename... Args>
 struct AddThiscall<R(*)(Args...)> {
-    using type = typename R(__thiscall*)(Args...);
+    using type = R(__thiscall*)(Args...);
 };
 
 // to be used in template args

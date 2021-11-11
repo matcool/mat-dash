@@ -1,5 +1,5 @@
 #pragma once
-#include <Minhook.h>
+#include <MinHook.h>
 
 void __mat_dash_add_hook(void* addr, void* detour, void** trampoline) {
     static bool initialized = false;

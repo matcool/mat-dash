@@ -13,6 +13,7 @@ this project is very basic, as its only temporary while lilac is in the works
 ```cpp
 #include <matdash.hpp>
 #include <matdash/minhook.hpp>
+#include <matdash/boilerplate.hpp>
 #include <gd.h>
 
 using namespace cocos2d;
@@ -53,8 +54,6 @@ void mod_main() {
     // optimized, which is what MAT dash defaults to
     add_hook<&PlayLayer_update, Thiscall>(gd::base + 0x2029c0);
 }
-
-#include <matdash/boilerplate.hpp>
 ```
 
 # Installation
