@@ -13,6 +13,3 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID) {
     }
     return TRUE;
 }
-
-// stupid way of allowing no args
-#define mod_main() mod_main(HMODULE)
