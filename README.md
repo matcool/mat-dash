@@ -46,7 +46,7 @@ void PlayLayer_update(gd::PlayLayer* self, float dt) {
     orig<&PlayLayer_update, Thiscall>(self, dt * 0.5f);
 }
 
-void mod_main() {
+void mod_main(HMODULE) {
     add_hook<&MenuLayerMod::init_>(gd::base + 0x1907b0);
     add_hook<&MenuLayer_onNewgrounds>(gd::base + 0x191e90);
     add_hook<&GJDropDownLayer_init>(gd::base + 0x113530);
@@ -56,9 +56,6 @@ void mod_main() {
 }
 ```
 
-# Installation
+# Setup
 
-If youre using cmake then you can
-```cmake
-include(mat-dash/include.cmake)
-```
+Add the include folder to the include directories
