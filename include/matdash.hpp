@@ -1,49 +1,52 @@
 #pragma once
-#include "../src/template-utils.hpp"
+#include "matdash/detail/impl.hpp"
+#include <utility>
 
-void __mat_dash_add_hook(void* addr, void* detour, void** trampoline);
+namespace matdash {
+	inline void add_hook_impl(void* addr, void* detour, void** trampoline);
 
-namespace {
-    template <auto>
-    constexpr const bool __stupid_false = false;
-}
+	template <auto func, class T>
+	void add_hook(const T address) {
+		using F = detail::clean_fn_type<decltype(func)>::type;
+		using R = detail::function_ret<F>::type;
+		using Info = detail::extract_cc_or<R, CallConv::Membercall>;
+		add_hook<func, Info::value>(address);
+	}
 
-template <auto func, typename CallConv = Optcall>
-void add_hook(uintptr_t address) {
-    const auto addr = reinterpret_cast<void*>(address);
-    if constexpr (std::is_same_v<CallConv, Optcall>) {
-        if constexpr (std::is_member_function_pointer_v<decltype(func)>) {
-            __mat_dash_add_hook(addr,
-                reinterpret_cast<void*>(&optcall<typename RemoveThiscall<typename MemberToFn<decltype(func)>::type>::type>::template wrap<WrapMemberCall<func>::template wrap>),
-                reinterpret_cast<void**>(&Orig<func, Optcall>::orig)
-            );
-        } else {
-            __mat_dash_add_hook(addr,
-                reinterpret_cast<void*>(&optcall<decltype(func)>::template wrap<func>),
-                reinterpret_cast<void**>(&Orig<func, Optcall>::orig)
-            );
-        }
-    } else if constexpr (std::is_same_v<CallConv, Thiscall>) {
-        __mat_dash_add_hook(addr,
-            reinterpret_cast<void*>(&thiscall<decltype(func)>::template wrap<func>),
-            reinterpret_cast<void**>(&Orig<func, Thiscall>::orig)
-        );
-    } else if constexpr (std::is_same_v<CallConv, Optfastcall>) {
-        __mat_dash_add_hook(addr,
-            reinterpret_cast<void*>(&optfastcall<decltype(func)>::template wrap<func>),
-            reinterpret_cast<void**>(&Orig<func, CallConv>::orig)
-        );
-    } else {
-        static_assert(__stupid_false<func>, "Invalid calling convention");
-    }
-}
+	template <auto func, CallConv conv, class T>
+	void add_hook(const T address) {
+		const auto addr = reinterpret_cast<void*>(address);
+		static constexpr auto callable = detail::ternary<std::is_member_function_pointer_v<decltype(func)>>::value< 
+			&detail::wrap_member_fn<decltype(func)>::wrap<func>,
+			func>;
+		using F = typename detail::clean_fn_type<decltype(func)>::type;
+		using F1 = typename detail::remove_value_wrapper<F>::type;
+		void* func_addr;
+		void** tramp_addr;
 
-template <auto func, typename CallConv = Optcall>
-void add_hook(void* address) {
-    add_hook<func, CallConv>(reinterpret_cast<uintptr_t>(address));
-}
+		using wrapper = typename detail::wrapper_for_cc<conv>::type<F1>;
 
-template <typename R, typename T, typename... Args>
-void* member_addr(R(T::* func)(Args...)) {
-    return reinterpret_cast<void*&>(func);
+		func_addr = reinterpret_cast<void*>(&wrapper::template wrap<callable>);
+		tramp_addr = &wrapper::tramp<func>;
+
+		add_hook_impl(addr, func_addr, tramp_addr);
+	}
+
+	template <auto func, class... Args>
+	decltype(auto) orig(Args&&... args) {
+		using F = typename detail::clean_fn_type<decltype(func)>::type;
+		using R = typename detail::function_ret<F>::type;
+		using Info = typename detail::extract_cc_or<R, CallConv::Membercall>;
+		return orig<func, Info::value>(args...);
+	}
+
+	template <auto func, CallConv conv, class... Args>
+	decltype(auto) orig(Args&&... args) {
+		using F = typename detail::clean_fn_type<decltype(func)>::type;
+		using F1 = typename detail::remove_value_wrapper<F>::type;
+
+		using wrapper = typename detail::wrapper_for_cc<conv>::type<F1>;
+
+		return wrapper::invoke<func>(std::forward<Args>(args)...);
+	}
 }

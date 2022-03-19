@@ -1,12 +1,12 @@
 #pragma once
-#include <MinHook.h>
+#include <Minhook.h>
 
-void __mat_dash_add_hook(void* addr, void* detour, void** trampoline) {
-    static bool initialized = false;
-    if (!initialized) {
-        MH_Initialize();
-        initialized = true;
-    }
-    MH_CreateHook(addr, detour, trampoline);
-    MH_EnableHook(addr);
+inline void matdash::add_hook_impl(void* addr, void* detour, void** trampoline) {
+	static bool initialized = false;
+	if (!initialized) {
+		MH_Initialize();
+		initialized = true;
+	}
+	MH_CreateHook(addr, detour, trampoline);
+	MH_EnableHook(addr);
 }

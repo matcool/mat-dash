@@ -12,8 +12,13 @@ this project is very basic, as its only temporary while lilac is in the works
 
 ```cpp
 #include <matdash.hpp>
+
+// defines add_hook to use minhook
 #include <matdash/minhook.hpp>
+
+// lets you use mod_main
 #include <matdash/boilerplate.hpp>
+
 #include <gd.h>
 
 using namespace cocos2d;
@@ -23,7 +28,7 @@ public:
     // here the name cant be `init` as that'd make it a virtual
     // which doesnt work with the current code
     bool init_() {
-        if (!orig<&MenuLayerMod::init_>(this)) return false;
+        if (!matdash::orig<&MenuLayerMod::init_>(this)) return false;
 
         auto label = CCLabelBMFont::create("Hello world!", "bigFont.fnt");
         label->setPosition(ccp(200, 200));
@@ -35,24 +40,31 @@ public:
 
 void MenuLayer_onNewgrounds(gd::MenuLayer* self, CCObject* sender) {
     std::cout << "cool!" << std::endl;
-    orig<&MenuLayer_onNewgrounds>(self, sender);
+    matdash::orig<&MenuLayer_onNewgrounds>(self, sender);
 }
 
 bool GJDropDownLayer_init(gd::GJDropDownLayer* self, const char* title, float height) {
-    return orig<&GJDropDownLayer_init>(self, "my own title", height * 0.5f);
+    return matdash::orig<&GJDropDownLayer_init>(self, "my own title", height * 0.5f);
 }
 
-void PlayLayer_update(gd::PlayLayer* self, float dt) {
-    orig<&PlayLayer_update, Thiscall>(self, dt * 0.5f);
+matdash::cc::thiscall<void> PlayLayer_update(gd::PlayLayer* self, float dt) {
+    matdash::orig<&PlayLayer_update>(self, dt * 0.5f);
+    return {};
+}
+
+void PlayLayer_update_(gd::PlayLayer* self, float dt) {
+    // another way of specifying the calling convention
+    matdash::orig<&PlayLayer_update_, matdash::Thiscall>(self, dt * 0.5f);
 }
 
 void mod_main(HMODULE) {
-    add_hook<&MenuLayerMod::init_>(gd::base + 0x1907b0);
-    add_hook<&MenuLayer_onNewgrounds>(gd::base + 0x191e90);
-    add_hook<&GJDropDownLayer_init>(gd::base + 0x113530);
-    // Note the `Thiscall`, this is because PlayLayer::update is not
-    // optimized, which is what MAT dash defaults to
-    add_hook<&PlayLayer_update, Thiscall>(gd::base + 0x2029c0);
+    matdash::add_hook<&MenuLayerMod::init_>(gd::base + 0x1907b0);
+    matdash::add_hook<&MenuLayer_onNewgrounds>(gd::base + 0x191e90);
+    matdash::add_hook<&GJDropDownLayer_init>(gd::base + 0x113530);
+    matdash::add_hook<&PlayLayer_update>(gd::base + 0x2029c0);
+
+    // another way of specifying the calling convention
+    matdash::add_hook<&PlayLayer_update_, matdash::Thiscall>(gd::base + 0x2029c0);
 }
 ```
 
