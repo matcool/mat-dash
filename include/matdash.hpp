@@ -21,13 +21,11 @@ namespace matdash {
 			func>;
 		using F = typename detail::clean_fn_type<decltype(func)>::type;
 		using F1 = typename detail::remove_value_wrapper<F>::type;
-		void* func_addr;
-		void** tramp_addr;
 
 		using wrapper = typename detail::wrapper_for_cc<conv>::template type<F1>;
 
-		func_addr = reinterpret_cast<void*>(&wrapper::template wrap<callable>);
-		tramp_addr = &detail::wrappers::template tramp<func>;
+		void* const func_addr = reinterpret_cast<void*>(&wrapper::template wrap<callable>);
+		void** const tramp_addr = &detail::wrappers::template tramp<func>;
 
 		add_hook_impl(addr, func_addr, tramp_addr);
 	}

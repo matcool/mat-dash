@@ -10,36 +10,36 @@ namespace matdash {
 		Stdcall
 	};
 
+	namespace detail {
+		template <class T, CallConv>
+		struct ValueWrapper {
+			T value;
+			template <class... Args>
+			ValueWrapper(Args&&... v) : value(std::forward<Args>(v)...) {}
+			ValueWrapper(T v) : value(v) {}
+			operator T(){ return value; }
+		};
+
+		template <CallConv cc>
+		struct ValueWrapper<void, cc> {};
+	}
+
 	namespace cc {
-		namespace {
-			template <class T, CallConv>
-			struct ValueWrapper {
-				T value;
-				template <class... Args>
-				ValueWrapper(Args&&... v) : value(std::forward<Args>(v)...) {}
-				ValueWrapper(T v) : value(v) {}
-				operator T(){ return value; }
-			};
-
-			template <CallConv cc>
-			struct ValueWrapper<void, cc> {};
-		}
+		template <class T>
+		using optcall = detail::ValueWrapper<T, Optcall>;
 
 		template <class T>
-		using optcall = ValueWrapper<T, Optcall>;
+		using membercall = detail::ValueWrapper<T, Membercall>;
 
 		template <class T>
-		using membercall = ValueWrapper<T, Membercall>;
-
-		template <class T>
-		using thiscall = ValueWrapper<T, Thiscall>;
+		using thiscall = detail::ValueWrapper<T, Thiscall>;
 
 		// cant name it cdecl :(
 		template <class T>
-		using c_decl = ValueWrapper<T, Cdecl>;
+		using c_decl = detail::ValueWrapper<T, Cdecl>;
 
 		template <class T>
-		using stdcall = ValueWrapper<T, Stdcall>;
+		using stdcall = detail::ValueWrapper<T, Stdcall>;
 	}
 
 	namespace detail {
@@ -57,8 +57,8 @@ namespace matdash {
 			using type = T;
 		};
 
-		template <class T, CallConv c>
-		struct extract_cc_or<typename cc::ValueWrapper<T, c>, c> {
+		template <class T, CallConv c, CallConv idk>
+		struct extract_cc_or<ValueWrapper<T, c>, idk> {
 			static constexpr auto value = c;
 			using type = T;
 		};
