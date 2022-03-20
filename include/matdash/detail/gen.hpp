@@ -1,6 +1,6 @@
 
 template <class R, class ...Args>
-struct optcall<R(Args...)> : optcall<void> {
+struct optcall<R(Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(Args... args) {
 		return func(args...);
@@ -14,7 +14,7 @@ struct optcall<R(Args...)> : optcall<void> {
 
 
 template <class R, class A, class B, class C, class ...Args>
-struct optcall<R(A, B, C, float, Args...)> : optcall<void> {
+struct optcall<R(A, B, C, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, B a1, C a2, Args... args) {
 		float a3;
@@ -30,7 +30,7 @@ struct optcall<R(A, B, C, float, Args...)> : optcall<void> {
 
 
 template <class R, class A, class B, class ...Args>
-struct optcall<R(A, B, float, Args...)> : optcall<void> {
+struct optcall<R(A, B, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, B a1, Args... args) {
 		float a2;
@@ -46,7 +46,7 @@ struct optcall<R(A, B, float, Args...)> : optcall<void> {
 
 
 template <class R, class A, class B, class ...Args>
-struct optcall<R(A, B, float, float, Args...)> : optcall<void> {
+struct optcall<R(A, B, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, B a1, Args... args) {
 		float a2, a3;
@@ -64,7 +64,7 @@ struct optcall<R(A, B, float, float, Args...)> : optcall<void> {
 
 
 template <class R, class A, class ...Args>
-struct optcall<R(A, float, Args...)> : optcall<void> {
+struct optcall<R(A, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, Args... args) {
 		float a1;
@@ -80,7 +80,7 @@ struct optcall<R(A, float, Args...)> : optcall<void> {
 
 
 template <class R, class A, class C, class ...Args>
-struct optcall<R(A, float, C, float, Args...)> : optcall<void> {
+struct optcall<R(A, float, C, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, C a2, Args... args) {
 		float a1, a3;
@@ -98,7 +98,7 @@ struct optcall<R(A, float, C, float, Args...)> : optcall<void> {
 
 
 template <class R, class A, class ...Args>
-struct optcall<R(A, float, float, Args...)> : optcall<void> {
+struct optcall<R(A, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, Args... args) {
 		float a1, a2;
@@ -116,7 +116,7 @@ struct optcall<R(A, float, float, Args...)> : optcall<void> {
 
 
 template <class R, class A, class ...Args>
-struct optcall<R(A, float, float, float, Args...)> : optcall<void> {
+struct optcall<R(A, float, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(A a0, Args... args) {
 		float a1, a2, a3;
@@ -136,7 +136,7 @@ struct optcall<R(A, float, float, float, Args...)> : optcall<void> {
 
 
 template <class R, class ...Args>
-struct optcall<R(float, Args...)> : optcall<void> {
+struct optcall<R(float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(Args... args) {
 		float a0;
@@ -152,7 +152,7 @@ struct optcall<R(float, Args...)> : optcall<void> {
 
 
 template <class R, class B, class C, class ...Args>
-struct optcall<R(float, B, C, float, Args...)> : optcall<void> {
+struct optcall<R(float, B, C, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(B a1, C a2, Args... args) {
 		float a0, a3;
@@ -170,7 +170,7 @@ struct optcall<R(float, B, C, float, Args...)> : optcall<void> {
 
 
 template <class R, class B, class ...Args>
-struct optcall<R(float, B, float, Args...)> : optcall<void> {
+struct optcall<R(float, B, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(B a1, Args... args) {
 		float a0, a2;
@@ -188,7 +188,7 @@ struct optcall<R(float, B, float, Args...)> : optcall<void> {
 
 
 template <class R, class B, class ...Args>
-struct optcall<R(float, B, float, float, Args...)> : optcall<void> {
+struct optcall<R(float, B, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(B a1, Args... args) {
 		float a0, a2, a3;
@@ -208,7 +208,7 @@ struct optcall<R(float, B, float, float, Args...)> : optcall<void> {
 
 
 template <class R, class ...Args>
-struct optcall<R(float, float, Args...)> : optcall<void> {
+struct optcall<R(float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(Args... args) {
 		float a0, a1;
@@ -226,7 +226,7 @@ struct optcall<R(float, float, Args...)> : optcall<void> {
 
 
 template <class R, class C, class ...Args>
-struct optcall<R(float, float, C, float, Args...)> : optcall<void> {
+struct optcall<R(float, float, C, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(C a2, Args... args) {
 		float a0, a1, a3;
@@ -246,7 +246,7 @@ struct optcall<R(float, float, C, float, Args...)> : optcall<void> {
 
 
 template <class R, class ...Args>
-struct optcall<R(float, float, float, Args...)> : optcall<void> {
+struct optcall<R(float, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(Args... args) {
 		float a0, a1, a2;
@@ -266,7 +266,7 @@ struct optcall<R(float, float, float, Args...)> : optcall<void> {
 
 
 template <class R, class ...Args>
-struct optcall<R(float, float, float, float, Args...)> : optcall<void> {
+struct optcall<R(float, float, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __fastcall wrap(Args... args) {
 		float a0, a1, a2, a3;
@@ -288,7 +288,7 @@ struct optcall<R(float, float, float, float, Args...)> : optcall<void> {
 
 
 template <class R, class ...Args>
-struct membercall<R(Args...)> : membercall<void> {
+struct membercall<R(Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(Args... args) {
 		return func(args...);
@@ -302,7 +302,7 @@ struct membercall<R(Args...)> : membercall<void> {
 
 
 template <class R, class A, class B, class C, class ...Args>
-struct membercall<R(A, B, C, float, Args...)> : membercall<void> {
+struct membercall<R(A, B, C, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, B a1, C a2, Args... args) {
 		float a3;
@@ -318,7 +318,7 @@ struct membercall<R(A, B, C, float, Args...)> : membercall<void> {
 
 
 template <class R, class A, class B, class ...Args>
-struct membercall<R(A, B, float, Args...)> : membercall<void> {
+struct membercall<R(A, B, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, B a1, Args... args) {
 		float a2;
@@ -334,7 +334,7 @@ struct membercall<R(A, B, float, Args...)> : membercall<void> {
 
 
 template <class R, class A, class B, class ...Args>
-struct membercall<R(A, B, float, float, Args...)> : membercall<void> {
+struct membercall<R(A, B, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, B a1, Args... args) {
 		float a2, a3;
@@ -352,7 +352,7 @@ struct membercall<R(A, B, float, float, Args...)> : membercall<void> {
 
 
 template <class R, class A, class ...Args>
-struct membercall<R(A, float, Args...)> : membercall<void> {
+struct membercall<R(A, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, Args... args) {
 		float a1;
@@ -368,7 +368,7 @@ struct membercall<R(A, float, Args...)> : membercall<void> {
 
 
 template <class R, class A, class C, class ...Args>
-struct membercall<R(A, float, C, float, Args...)> : membercall<void> {
+struct membercall<R(A, float, C, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, C a2, Args... args) {
 		float a1, a3;
@@ -386,7 +386,7 @@ struct membercall<R(A, float, C, float, Args...)> : membercall<void> {
 
 
 template <class R, class A, class ...Args>
-struct membercall<R(A, float, float, Args...)> : membercall<void> {
+struct membercall<R(A, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, Args... args) {
 		float a1, a2;
@@ -404,7 +404,7 @@ struct membercall<R(A, float, float, Args...)> : membercall<void> {
 
 
 template <class R, class A, class ...Args>
-struct membercall<R(A, float, float, float, Args...)> : membercall<void> {
+struct membercall<R(A, float, float, float, Args...)> {
 	template <auto func>
 	static decltype(auto) __thiscall wrap(A a0, Args... args) {
 		float a1, a2, a3;

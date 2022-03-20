@@ -2,7 +2,7 @@ from typing import List
 
 template = '''
 template <{template_args}>
-struct {name}<{template_spec}> : {name}<void> {{
+struct {name}<{template_spec}> {{
 	template <auto func>
 	static decltype(auto) {callconv} wrap({wrap_args}) {{
 		{wrap_body}

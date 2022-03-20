@@ -112,6 +112,9 @@ namespace matdash {
 		};
 
 		namespace wrappers {
+			template <auto>
+			static void* tramp = nullptr;
+
 			template <class F>
 			struct thiscall;
 
@@ -124,8 +127,6 @@ namespace matdash {
 					else
 						return func(args...);
 				}
-				template <auto>
-				static void* tramp;
 				template <auto func>
 				static R invoke(Args... args) {
 					return reinterpret_cast<R(__thiscall*)(Args...)>(tramp<func>)(args...);
@@ -144,8 +145,6 @@ namespace matdash {
 					else
 						return func(args...);
 				}
-				template <auto>
-				static void* tramp;
 				template <auto func>
 				static R invoke(Args... args) {
 					return reinterpret_cast<R(__cdecl*)(Args...)>(tramp<func>)(args...);
@@ -164,8 +163,6 @@ namespace matdash {
 					else
 						return func(args...);
 				}
-				template <auto>
-				static void* tramp;
 				template <auto func>
 				static R invoke(Args... args) {
 					return reinterpret_cast<R(__stdcall*)(Args...)>(tramp<func>)(args...);
@@ -173,16 +170,10 @@ namespace matdash {
 			};
 
 			template <class F>
-			struct membercall {
-				template <auto>
-				static void* tramp;
-			};
+			struct membercall;
 
 			template <class F>
-			struct optcall {
-				template <auto>
-				static void* tramp;
-			};
+			struct optcall;
 
 			#include "gen.hpp"
 		}
