@@ -1,14 +1,21 @@
+
 # MAT dash
 
-mat dash
+  
 
-templates gone insane
+A simple C++ 17 library to manage low-level hooks in x86/32 bit Windows aplications.
+MAT-dash by itself is not a hooking library as it depends on other libraries to create hooks.
 
-Thx to pie for some help on the templates
+This library offers its users a convenient way to hook functions without the need to create additional function pointers to call the original function which was hooked, thus reducing boilerplate code that it is needed to create a project utilizing low-level hooks.
 
-this project is very basic, as its only temporary while lilac is in the works
+  
+This project is very basic, as its only temporary while [Geode](https://github.com/geode-sdk/) is in the works
+
+  
 
 ## Usage
+
+  
 
 ```cpp
 #include <matdash.hpp>
@@ -68,6 +75,11 @@ void mod_main(HMODULE) {
 }
 ```
 
+  
+
 # Setup
 
 Add the include folder to the include directories
+
+# Credit
+Thanks to [pie](https://github.com/poweredbypie) for some help on the templates and thanks to [AndreNIH](https://github.com/AndreNIH) for helping out on the calling convention encoding mechanism
