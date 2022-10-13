@@ -1,3 +1,5 @@
+#pragma once
+
 void mod_main(HMODULE);
 
 DWORD WINAPI __mat_dash_thread_function(void* module) {
