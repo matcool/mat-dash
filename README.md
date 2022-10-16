@@ -56,6 +56,11 @@ void PlayLayer_update_(gd::PlayLayer* self, float dt) {
     matdash::orig<&PlayLayer_update_, matdash::Thiscall>(self, dt * 0.5f);
 }
 
+//static function
+matdash::cc::c_decl<CCLabelBMFont*> CCLabelBMFont_create(const char* text, const char* fontfile) {
+    return matdash::orig<&CCLabelBMFont_create>(text, fontfile);
+}
+
 void mod_main(HMODULE) {
     matdash::add_hook<&MenuLayerMod::init_>(gd::base + 0x1907b0);
     matdash::add_hook<&MenuLayer_onNewgrounds>(gd::base + 0x191e90);
@@ -64,6 +69,10 @@ void mod_main(HMODULE) {
 
     // another way of specifying the calling convention
     matdash::add_hook<&PlayLayer_update_, matdash::Thiscall>(gd::base + 0x2029c0);
+    
+    //libcocos2d.dll hook by symbol
+    const auto addr = GetProcAddress(GetModuleHandleA("libcocos2d.dll"), "?create@CCLabelBMFont@cocos2d@@SAPAV12@PBD0@Z");
+    matdash::add_hook<&CCLabelBMFont_create>(addr);
 }
 ```
 
