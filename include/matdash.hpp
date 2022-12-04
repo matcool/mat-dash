@@ -5,14 +5,6 @@
 namespace matdash {
 	inline void add_hook_impl(void* addr, void* detour, void** trampoline);
 
-	template <auto func, class T>
-	void add_hook(const T address) {
-		using F = typename detail::clean_fn_type<decltype(func)>::type;
-		using R = typename detail::function_ret<F>::type;
-		using Info = detail::extract_cc_or<R, CallConv::Membercall>;
-		add_hook<func, Info::value>(address);
-	}
-
 	template <auto func, CallConv conv, class T>
 	void add_hook(const T address) {
 		const auto addr = reinterpret_cast<void*>(address);
@@ -28,6 +20,14 @@ namespace matdash {
 		void** const tramp_addr = &detail::wrappers::template tramp<func>;
 
 		add_hook_impl(addr, func_addr, tramp_addr);
+	}
+
+	template <auto func, class T>
+	void add_hook(const T address) {
+		using F = typename detail::clean_fn_type<decltype(func)>::type;
+		using R = typename detail::function_ret<F>::type;
+		using Info = detail::extract_cc_or<R, CallConv::Membercall>;
+		add_hook<func, Info::value>(address);
 	}
 
 	template <auto func, CallConv conv, class... Args>
