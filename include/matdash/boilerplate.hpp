@@ -1,15 +1,22 @@
+#include <Windows.h>
+
 void mod_main(HMODULE);
 
-DWORD WINAPI __mat_dash_thread_function(void* module) {
-	mod_main(reinterpret_cast<HMODULE>(module));
-	return 0;
+namespace {
+	DWORD WINAPI mat_dash_thread_function__(void* module) {
+		mod_main(reinterpret_cast<HMODULE>(module));
+		return 0;
+	}
 }
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID) {
 	if (reason == DLL_PROCESS_ATTACH) {
 		DisableThreadLibraryCalls(module);
-		if (auto handle = CreateThread(0, 0, __mat_dash_thread_function, module, 0, 0))
+		if (auto handle = CreateThread(0, 0, mat_dash_thread_function__, module, 0, 0)) {
 			CloseHandle(handle);
+		} else {
+			return FALSE;
+		}
 	}
 	return TRUE;
 }
