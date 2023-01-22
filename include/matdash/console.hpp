@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <consoleapi.h>
+#include <stdio.h>
 
 namespace matdash {
 	struct Console {
@@ -12,6 +13,9 @@ namespace matdash {
 			in = decltype(in)("CONIN$", std::ios::in);
 			std::cout.rdbuf(out.rdbuf());
 			std::cin.rdbuf(in.rdbuf());
+			
+			FILE* dummy;
+			freopen_s(&dummy, "CONOUT$", "w", stdout);
 		}
 		~Console() {
 			out.close();
